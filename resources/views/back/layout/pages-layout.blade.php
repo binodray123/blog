@@ -10,17 +10,17 @@
     <link
         rel="apple-touch-icon"
         sizes="180x180"
-        href="back/vendors/images/apple-touch-icon.png" />
+        href="{{ asset('back/vendors/images/apple-touch-icon.png')}}" />
     <link
         rel="icon"
         type="image/png"
         sizes="32x32"
-        href="back/vendors/images/favicon-32x32.png" />
+        href="{{ asset('back/vendors/images/favicon-32x32.png')}}" />
     <link
         rel="icon"
         type="image/png"
         sizes="16x16"
-        href="back/vendors/images/favicon-16x16.png" />
+        href="{{ asset('back/vendors/images/favicon-16x16.png')}}" />
 
     <!-- Mobile Specific Metas -->
     <meta
@@ -32,12 +32,12 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
     <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="back/vendors/styles/core.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('back/vendors/styles/core.css')}}" />
     <link
         rel="stylesheet"
         type="text/css"
-        href="back/vendors/styles/icon-font.min.css" />
-    <link rel="stylesheet" type="text/css" href="back/vendors/styles/style.css" />
+        href="{{ asset('back/vendors/styles/icon-font.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('back/vendors/styles/style.css')}}" />
     @stack('stylesheets')
 </head>
 
@@ -125,7 +125,7 @@
                             <ul>
                                 <li>
                                     <a href="#">
-                                        <img src="back/vendors/images/img.jpg" alt="" />
+                                        <img src="{{ asset('back/vendors/images/img.jpg')}}" alt="" />
                                         <h3>John Doe</h3>
                                         <p>
                                             Lorem ipsum dolor sit amet, consectetur adipisicing
@@ -135,7 +135,7 @@
                                 </li>
                                 <li>
                                     <a href="#">
-                                        <img src="back/vendors/images/photo1.jpg" alt="" />
+                                        <img src="{{ asset('back/vendors/images/photo1.jpg')}}" alt="" />
                                         <h3>Lea R. Frith</h3>
                                         <p>
                                             Lorem ipsum dolor sit amet, consectetur adipisicing
@@ -145,7 +145,7 @@
                                 </li>
                                 <li>
                                     <a href="#">
-                                        <img src="back/vendors/images/photo2.jpg" alt="" />
+                                        <img src="{{ asset('back/vendors/images/photo2.jpg')}}" alt="" />
                                         <h3>Erik L. Richards</h3>
                                         <p>
                                             Lorem ipsum dolor sit amet, consectetur adipisicing
@@ -155,7 +155,7 @@
                                 </li>
                                 <li>
                                     <a href="#">
-                                        <img src="back/vendors/images/photo3.jpg" alt="" />
+                                        <img src="{{ asset('back/vendors/images/photo3.jpg')}}" alt="" />
                                         <h3>John Doe</h3>
                                         <p>
                                             Lorem ipsum dolor sit amet, consectetur adipisicing
@@ -165,7 +165,7 @@
                                 </li>
                                 <li>
                                     <a href="#">
-                                        <img src="back/vendors/images/photo4.jpg" alt="" />
+                                        <img src="{{ asset('back/vendors/images/photo4.jpg')}}" alt="" />
                                         <h3>Renee I. Hansen</h3>
                                         <p>
                                             Lorem ipsum dolor sit amet, consectetur adipisicing
@@ -175,7 +175,7 @@
                                 </li>
                                 <li>
                                     <a href="#">
-                                        <img src="back/vendors/images/img.jpg" alt="" />
+                                        <img src="{{ asset('back/vendors/images/img.jpg')}}" alt="" />
                                         <h3>Vicki M. Coleman</h3>
                                         <p>
                                             Lorem ipsum dolor sit amet, consectetur adipisicing
@@ -196,7 +196,7 @@
                         role="button"
                         data-toggle="dropdown">
                         <span class="user-icon">
-                            <img src="back/vendors/images/photo1.jpg" alt="" />
+                            <img src="{{ asset('back/vendors/images/photo1.jpg')}}" alt="" />
                         </span>
                         <span class="user-name">Ross C. Lopez</span>
                     </a>
@@ -205,12 +205,16 @@
                         <a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>
                         <a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
                         <a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
-                        <a class="dropdown-item" href="login.html"><i class="dw dw-logout"></i> Log Out</a>
+                        <a class="dropdown-item" href="{{route('admin.logout')}}"
+                        onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="dw dw-logout"></i> Log Out</a>
+                        <form action="{{route('admin.logout')}}" id="logout-form" method="POST">
+                            @csrf
+                        </form>
                     </div>
                 </div>
             </div>
             <div class="github-link">
-                <a href="https://github.com/dropways/deskapp" target="_blank"><img src="back/vendors/images/github.svg" alt="" /></a>
+                <a href="https://github.com/dropways/deskapp" target="_blank"><img src="{{ asset('back/vendors/images/github.svg')}}" alt="" /></a>
             </div>
         </div>
     </div>
@@ -351,9 +355,9 @@
     <div class="left-side-bar">
         <div class="brand-logo">
             <a href="index.html">
-                <img src="back/vendors/images/deskapp-logo.svg" alt="" class="dark-logo" />
+                <img src="{{ asset('back/vendors/images/deskapp-logo.svg')}}" alt="" class="dark-logo" />
                 <img
-                    src="back/vendors/images/deskapp-logo-white.svg"
+                    src="{{ asset('back/vendors/images/deskapp-logo-white.svg')}}"
                     alt=""
                     class="light-logo" />
             </a>
@@ -555,7 +559,7 @@
                             class="dropdown-toggle no-arrow">
                             <span class="micon bi bi-layout-text-window-reverse"></span>
                             <span class="mtext">Landing Page
-                                <img src="back/vendors/images/coming-soon.png" alt="" width="25" /></span>
+                                <img src="{{ asset('back/vendors/images/coming-soon.png')}}" alt="" width="25" /></span>
                         </a>
                     </li>
                 </ul>
@@ -614,10 +618,10 @@
     </div>
 
     <!-- js -->
-    <script src="back/vendors/scripts/core.js"></script>
-    <script src="back/vendors/scripts/script.min.js"></script>
-    <script src="back/vendors/scripts/process.js"></script>
-    <script src="back/vendors/scripts/layout-settings.js"></script>
+    <script src="{{ asset('back/vendors/scripts/core.js')}}"></script>
+    <script src="{{ asset('back/vendors/scripts/script.min.js')}}"></script>
+    <script src="{{ asset('back/vendors/scripts/process.js')}}"></script>
+    <script src="{{ asset('back/vendors/scripts/layout-settings.js')}}"></script>
     @stack('scripts')
 </body>
 
