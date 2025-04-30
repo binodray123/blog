@@ -19,6 +19,12 @@ Route::get('/', function () {
 });
 
 /*
+* Testing Routes
+*/
+Route::view('/example-page','example-page');
+Route::view('/example-auth','example-auth');
+
+/*
 * Admin Routes
 */
 Route::prefix('admin')->name('admin.')->group(function () {
