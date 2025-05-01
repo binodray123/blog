@@ -24,8 +24,8 @@
                             <p style="text-align: center; margin: 30px 0;">
                                 <a href="{{ $actionlink }}" style="background-color: #007bff; color: white; padding: 12px 24px; border-radius: 5px; text-decoration: none; display: inline-block;">Reset Password</a>
                             </p>
-                            <p style="font-size: 14px; color: #777777;">If you didn’t request a password reset, you can safely ignore this email.</p>
-                            <p style="font-size: 14px; color: #777777;">This link will expire in 60 minutes.</p>
+                            <p style="font-size: 14px; color: #777777;">If you did not request a password reset, you can safely ignore this email.</p>
+                            <p style="font-size: 14px; color: #777777;">This link will expire in 15 minutes.</p>
                             <p style="font-size: 14px; color: #777777;">Thanks,<br>The Larablog Team</p>
                         </td>
                     </tr>
