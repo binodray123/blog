@@ -22,4 +22,12 @@ class AdminController extends Controller
         $request->session()->regenerateToken();
         return redirect()->route('admin.login')->with('fail', 'You are now logged out.');
     }
+
+    public function profileView(Request $request)
+    {
+        $data = [
+            'pageTitle' => 'Profile'
+        ];
+        return view('back.pages.profile', $data);
+    }
 }
