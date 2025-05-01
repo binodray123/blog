@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redis;
+
 class AuthController extends Controller
 {
     public function loginForm(Request $request)
@@ -83,58 +85,121 @@ class AuthController extends Controller
     {
         // validate the form
         $request->validate([
-            'email'=>'required|email|exists:users,email'
-        ],[
-            'email.required'=>'The :attribute is required',
-            'email.email'=>'Invalid email address',
-            'email.exists'=>'We can not find a user with this email address'
+            'email' => 'required|email|exists:users,email'
+        ], [
+            'email.required' => 'The :attribute is required',
+            'email.email' => 'Invalid email address',
+            'email.exists' => 'We can not find a user with this email address'
         ]);
 
         // Get User Details
-        $user = User::where('email',$request->email)->first();
+        $user = User::where('email', $request->email)->first();
         //Generate Token
         $token = base64_encode(Str::random(64));
         //Check if there is an existing token
         $oldToken = DB::table('password_resets')
-        ->where('email',$user->email)
-        ->first();
+            ->where('email', $user->email)
+            ->first();
 
-        if($oldToken){
+        if ($oldToken) {
             //Updating existing Token
             DB::table('password_resets')
-            ->where('email', $user->email)
-            ->update([
-                'token'=>$token,
-                'created_at'=>Carbon::now()
-            ]);
-        }else{
+                ->where('email', $user->email)
+                ->update([
+                    'token' => $token,
+                    'created_at' => Carbon::now()
+                ]);
+        } else {
             //Add new reset password token
             DB::table('password_resets')->insert([
-                'email'=>$user->email,
-                'token'=>$token,
-                'created_at'=>Carbon::now()
+                'email' => $user->email,
+                'token' => $token,
+                'created_at' => Carbon::now()
             ]);
         }
         //Create clickable action link
-        $actionLink = route('admin.reset_password_form',['token'=>$token]);
+        $actionLink = route('admin.reset_password_form', ['token' => $token]);
 
         $data = array(
-            'actionlink'=>$actionLink,
-            'user'=>$user
+            'actionlink' => $actionLink,
+            'user' => $user
         );
 
-        $mail_body = view('email-templates.forgot-template',$data)->render();
+        $mail_body = view('email-templates.forgot-template', $data)->render();
         $mailConfig = array(
-            'recipient_address'=>$user->email,
-            'recipient_name'=>$user->name,
-            'subject'=>'Reset Password',
-            'body'=>$mail_body
+            'recipient_address' => $user->email,
+            'recipient_name' => $user->name,
+            'subject' => 'Reset Password',
+            'body' => $mail_body
         );
 
-        if(CMail::send($mailConfig)){
-            return redirect()->route('admin.forgot')->with('success','We have e-mailed your password reset link.');
-        }else{
+        if (CMail::send($mailConfig)) {
+            return redirect()->route('admin.forgot')->with('success', 'We have e-mailed your password reset link.');
+        } else {
             return redirect()->route('admin.forgot')->with('fail', 'Something went wrong. Resetting password link not sent. Try again later!');
+        }
+    }
+
+    public function resetForm(Request $request, $token = null)
+    {
+        //Check if this token is exists
+        $isTokenExists = DB::table('password_resets')
+            ->where('token', $token)
+            ->first();
+
+        if (!$isTokenExists) {
+            return redirect()->route('admin.forgot')->with('fail', 'Invalid token! Request another rest password link.');
+        } else {
+            $data = [
+                'pageTitle' => 'Reset Password',
+                'token' => $token
+            ];
+
+            return view('back.pages.auth.reset', $data);
+        }
+    }
+
+    public function resetPasswordHandler(Request $request)
+    {
+        //Validate the Form
+        $request->validate([
+            'new_password' => 'required|min:5|required_with:new_password_confirmation|same:new_password_confirmation',
+            'new_password_confirmation' => 'required'
+        ]);
+        $dbToken = DB::table('password_resets')
+            ->where('token', $request->token)
+            ->first();
+        //Get User details
+        $user = User::where('email', $dbToken->email)->first();
+        //Update Password
+        User::where('email', $user->email)->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+        //Send notification email to this user email address that contains new password
+        $data = array(
+            'user' => $user,
+            'new_password' => $request->new_password
+        );
+
+        $mail_body = view('email-templates.password-changes-template', $data)->render();
+        $mailConfig = array(
+            'recipient_address' => $user->email,
+            'recipient_name' => $user->name,
+            'subject' => 'Password Changed',
+            'body' => $mail_body
+        );
+        if (CMail::send($mailConfig)) {
+            //Delete token form DB
+            DB::table('password_resets')->where([
+                'email' => $dbToken->email,
+                'token' => $dbToken->token
+            ])->delete();
+
+            return redirect()->route('admin.login')->with('success', 'Done!, Your password has been changed successfully.
+            Use your new password for login into system.');
+        } else {
+            return redirect()->route('admin.reset_password_form', ['token' => $dbToken->token])
+                ->with('fail', 'Something went wrong. Try again Later.');
         }
     }
 }
