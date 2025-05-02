@@ -396,7 +396,7 @@
                     </li>
                     <li>
                         <a
-                            href="#"
+                            href="{{route('admin.settings')}}"
                             class="dropdown-toggle no-arrow">
                             <span class="micon fa fa-cogs"></span>
                             <span class="mtext">General</span>
