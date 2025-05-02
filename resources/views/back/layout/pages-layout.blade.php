@@ -333,12 +333,12 @@
 
     <div class="left-side-bar">
         <div class="brand-logo">
-            <a href="index.html">
-                <img src="{{ asset('back/vendors/images/deskapp-logo.svg')}}" alt="" class="dark-logo" />
+            <a href="/">
+                <img src="/images/site/{{isset(settings()->site_logo) ? settings()->site_logo : ''}}" alt="" class="dark-logo site_logo" />
                 <img
-                    src="{{ asset('back/vendors/images/deskapp-logo-white.svg')}}"
+                    src="/images/site/{{isset(settings()->site_logo) ? settings()->site_logo : ''}}"
                     alt=""
-                    class="light-logo" />
+                    class="light-logo site_logo" />
             </a>
             <div class="close-sidebar" data-toggle="left-sidebar-close">
                 <i class="ion-close-round"></i>
