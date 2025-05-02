@@ -5,6 +5,7 @@
     <!-- Basic Page Info -->
     <meta charset="utf-8" />
     <title>@yield('pageTitle')</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Site favicon -->
     <link
@@ -38,6 +39,7 @@
         type="text/css"
         href="{{ asset('back/vendors/styles/icon-font.min.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('back/vendors/styles/style.css')}}" />
+    @kropifyStyles
     @stack('stylesheets')
     @livewireStyles
 </head>
@@ -425,7 +427,8 @@
     <script src="{{ asset('back/vendors/scripts/script.min.js')}}"></script>
     <script src="{{ asset('back/vendors/scripts/process.js')}}"></script>
     <script src="{{ asset('back/vendors/scripts/layout-settings.js')}}"></script>
-
+    <script src="/jquery-3.0.0.min.js"></script>
+    @kropifyScripts
     <script>
         window.addEventListener('showToastr', function(event) {
             const type = event.detail.type;

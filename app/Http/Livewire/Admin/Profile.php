@@ -13,6 +13,10 @@ class Profile extends Component
     protected $queryString = ['tab' => ['keep' => true]];
     public $name, $email, $username, $bio;
 
+    protected $listeners = [
+        'updateProfile' => '$refresh'
+    ];
+
     public function selectTab($tab)
     {
         $this->tab = $tab;
@@ -47,7 +51,7 @@ class Profile extends Component
 
         if ($updated) {
             $this->dispatchBrowserEvent('showToastr', ['type' => 'success', 'message' => 'Your personal details have been updated successfully.']);
-             $this->emitTo('admin.top-user-info','updateTopUserInfo');
+            $this->emitTo('admin.top-user-info', 'updateTopUserInfo');
         } else {
             $this->dispatchBrowserEvent('showToastr', ['type' => 'error', 'message' => 'Something went wrong.']);
         }
