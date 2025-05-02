@@ -153,7 +153,65 @@
                             </div>
                             <div class="tab-pane fade {{ $tab == 'social_links' ? 'show active' : ''}}" id="social_links" role="tabpanel">
                                 <div class="pd-20 profile-task-wrap">
-                                    ---- Social Links Here ----
+                                    <form wire:submit.prevent='updateSocialLinks' method="post">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for=""><b>Facebook</b></label>
+                                                    <input type="text" class="form-control" wire:model='facebook_url' placeholder="Facebook url">
+                                                    @error('facebook_url')
+                                                    <span class="text-danger ml-1">{{$message}}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for=""><b>Instagram</b></label>
+                                                    <input type="text" class="form-control" wire:model='instagram_url' placeholder="Instagram url">
+                                                    @error('instagram_url')
+                                                    <span class="text-danger ml-1">{{$message}}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for=""><b>YouTube</b></label>
+                                                    <input type="text" class="form-control" wire:model='youtube_url' placeholder="YouTube url">
+                                                    @error('youtube_url')
+                                                    <span class="text-danger ml-1">{{$message}}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for=""><b>LinkedIn</b></label>
+                                                    <input type="text" class="form-control" wire:model='linkedin_url' placeholder="LinkedIn url">
+                                                    @error('linkedin_url')
+                                                    <span class="text-danger ml-1">{{$message}}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for=""><b>Twitter</b></label>
+                                                    <input type="text" class="form-control" wire:model='twitter_url' placeholder="Twitter url">
+                                                    @error('twitter_url')
+                                                    <span class="text-danger ml-1">{{$message}}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for=""><b>GitHub</b></label>
+                                                    <input type="text" class="form-control" wire:model='github_url' placeholder="GitHub url">
+                                                    @error('github_url')
+                                                    <span class="text-danger ml-1">{{$message}}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Update Links</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
