@@ -425,53 +425,23 @@
     <script src="{{ asset('back/vendors/scripts/script.min.js')}}"></script>
     <script src="{{ asset('back/vendors/scripts/process.js')}}"></script>
     <script src="{{ asset('back/vendors/scripts/layout-settings.js')}}"></script>
+
     <script>
-        window.addEventListener('showToaster', function(event) {
-            $().notifa({
-                vers: 1,
-                cssClass: event.detail.type,
-                html: event.detail.message,
-                delay: 2500
-            });
-        });
-    </script>
-
-    <!-- <script>
         window.addEventListener('showToastr', function(event) {
-            // Create a new toast div
-            var toast = document.createElement('div');
-            toast.classList.add('toast'); // Add class for styling
+            const type = event.detail.type;
+            const message = event.detail.message;
 
-            // Set content and styling based on event data
-            toast.innerHTML = event.detail.message;
+            const alertBox = document.createElement('div');
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type === 'success' ? 'success' : 'danger'} fixed-top m-3 p-3 rounded shadow`;
+            alertBox.style.zIndex = '9999';
+            document.body.appendChild(alertBox);
 
-            // Styling for success and error types
-            if (event.detail.type === 'success') {
-                toast.style.backgroundColor = '#28a745'; // Green for success
-            } else {
-                toast.style.backgroundColor = '#dc3545'; // Red for error
-            }
-
-            // Basic styling
-            toast.style.position = 'fixed';
-            toast.style.top = '20px';
-            toast.style.right = '20px';
-            toast.style.padding = '10px 20px';
-            toast.style.borderRadius = '5px';
-            toast.style.color = '#fff';
-            toast.style.fontSize = '16px';
-            toast.style.zIndex = '9999';
-            toast.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
-
-            // Append the toast to the body
-            document.body.appendChild(toast);
-
-            // Remove the toast after 3 seconds
-            setTimeout(function() {
-                toast.remove();
+            setTimeout(() => {
+                alertBox.remove();
             }, 3000);
         });
-    </script> -->
+    </script>
 
     @stack('scripts')
     @livewireScripts

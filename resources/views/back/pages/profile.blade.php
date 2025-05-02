@@ -21,4 +21,5 @@
     </div>
 </div>
 @livewire('admin.profile')
+@livewire('admin.top-user-info')
 @endsection
