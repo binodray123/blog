@@ -4,6 +4,8 @@
 @livewire('admin.categories')
 @endsection
 @push('scripts')
+<!-- Include SweetAlert2 library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     window.addEventListener('showParentCategoryModalForm', function() {
         $('#pcategory_modal').modal('show');
@@ -30,6 +32,28 @@
             //  alert(positions);
             Livewire.emit('updateCategoryOrdering', positions);
         }
+    });
+    //Delete Parent Category
+
+    window.addEventListener('deleteParentCategory', function(event) {
+        var id = event.detail.id; // Access the ID of the category to delete
+
+        // Show SweetAlert2 confirmation dialog
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You want to delete this parent category.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Delete',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Emit the Livewire event to delete the category
+                Livewire.emit('deleteCategoryAction', id);
+            }
+        });
     });
 </script>
 @endpush

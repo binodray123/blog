@@ -40,7 +40,6 @@
 </head>
 
 <body>
-
     <div class="header">
         <div class="header-left">
             <div class="menu-icon bi bi-list"></div>

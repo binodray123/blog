@@ -10,8 +10,10 @@ class Categories extends Component
     public $isUpdateCategoryMode = false;
     public $pcategory_id, $pcategory_name;
 
+
     protected $listeners = [
-        'updateCategoryOrdering'
+        'updateCategoryOrdering',
+        'deleteCategoryAction'
     ];
 
 
@@ -88,6 +90,27 @@ class Categories extends Component
             $this->dispatchBrowserEvent('showToastr', ['type' => 'success', 'message' => 'Parent categories ordering have been updated successfully.']);
         }
     }
+
+    public function deleteParentCategory($id)
+    {
+        $this->dispatchBrowserEvent('deleteParentCategory', ['id' => $id]);
+    }
+
+    public function deleteCategoryAction($id)
+    {
+        $pcategory = ParentCategory::findOrFail($id);
+        //Check if this parent category as children
+
+        //Delete parent category
+        $delete = $pcategory->delete();
+
+        if ($delete) {
+            $this->dispatchBrowserEvent('showToastr', ['type' => 'success', 'message' => 'Parent category has been deleted successfully.']);
+        } else {
+            $this->dispatchBrowserEvent('showToastr', ['type' => 'error', 'message' => 'Something went wrong!']);
+        }
+    }
+
 
     public function showParentCategoryModalForm()
     {
