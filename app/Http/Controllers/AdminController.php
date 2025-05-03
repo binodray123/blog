@@ -115,8 +115,11 @@ class AdminController extends Controller
                     }
 
                     $settings->update(['site_favicon' => $filename]);
-                    return response()->json(['status' => 1, 'message' => 'Site favicon has been updated successfully.',
-                'image_path'=>$path.$filename]);
+                    return response()->json([
+                        'status' => 1,
+                        'message' => 'Site favicon has been updated successfully.',
+                        'image_path' => $path . $filename
+                    ]);
                 } else {
                     return response()->json(['status' => 0, 'Something went wrong in uploading new favicon.']);
                 }
@@ -124,5 +127,13 @@ class AdminController extends Controller
         } else {
             return response()->json(['status' => 0, 'message' => 'Make sure you updated general settings tab first.']);
         }
+    }
+
+    public function categoriesPage(Request $request)
+    {
+        $data = [
+            'pageTitle' => 'Manage Categories'
+        ];
+        return view('back.pages.categories_page', $data);
     }
 }
