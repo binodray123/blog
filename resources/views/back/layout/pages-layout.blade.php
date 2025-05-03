@@ -30,6 +30,10 @@
         type="text/css"
         href="{{ asset('back/vendors/styles/icon-font.min.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('back/vendors/styles/style.css')}}" />
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" href="/extra-assets/jquery-ui-1.14.1/jquery-ui.min.css">
+    <link rel="stylesheet" href="/extra-assets/jquery-ui-1.14.1/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="/extra-assets/jquery-ui-1.14.1/jquery-ui.theme.min.css">
     @kropifyStyles
     @stack('stylesheets')
     @livewireStyles
@@ -419,6 +423,8 @@
     <script src="{{ asset('back/vendors/scripts/process.js')}}"></script>
     <script src="{{ asset('back/vendors/scripts/layout-settings.js')}}"></script>
     <script src="/jquery-3.0.0.min.js"></script>
+    <!-- jQuery UI JS -->
+    <script src="/extra-assets/jquery-ui-1.14.1/jquery-ui.min.js"></script>
     @kropifyScripts
     <script>
         window.addEventListener('showToastr', function(event) {
