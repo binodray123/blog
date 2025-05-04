@@ -28,7 +28,7 @@ Route::view('/example-auth', 'example-auth');
 * Admin Routes
 */
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::middleware('guest', 'prevent-back-history')->group(function () {
+    Route::middleware(['guest', 'prevent-back-history'])->group(function () {
         Route::controller(AuthController::class)->group(function () {
             Route::get('/login', 'loginForm')->name('login');
             Route::post('/login', 'loginHandler')->name('login_handler');
@@ -39,16 +39,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
     });
 
-    Route::middleware('auth', 'prevent-back-history')->group(function () {
+    Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         Route::controller(AdminController::class)->group(function () {
             Route::get('/dashboard', 'adminDashboard')->name('dashboard');
             Route::post('/logout', 'logoutHandler')->name('logout');
             Route::get('/profile', 'profileView')->name('profile');
             Route::post('/update-profile-picture', 'updateProfilePicture')->name('update_profile_picture');
-            Route::get('/settings', 'generalSettings')->name('settings');
-            Route::post('/update-logo', 'updateLogo')->name('update_logo');
-            Route::post('/update-favicon', 'updateFavicon')->name('update_favicon');
-            Route::get('/categories', 'categoriesPage')->name('categories');
+
+            Route::middleware(['onlySuperAdmin'])->group(function () {
+                Route::get('/settings', 'generalSettings')->name('settings');
+                Route::post('/update-logo', 'updateLogo')->name('update_logo');
+                Route::post('/update-favicon', 'updateFavicon')->name('update_favicon');
+                Route::get('/categories', 'categoriesPage')->name('categories');
+            });
         });
     });
 });
