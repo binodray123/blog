@@ -23,7 +23,7 @@
                             <tr data-index="{{$item->id}}" data-ordering="{{$item->ordering}}">
                                 <td>{{ $item->id }}</td>
                                 <td>{{ $item->name }}</td>
-                                <td> - </td>
+                                <td> {{$item->children->count()}} </td>
                                 <td>
                                     <div class="table-actions">
                                         <a href="javascript:;" wire:click="editParentCategory({{$item->id}})" class="text-primary mx-2"><i class="dw dw-edit2"></i></a>
@@ -63,12 +63,13 @@
                             <th>N. of posts</th>
                             <th>Actions</th>
                         </thead>
-                        <tbody>
+                        <tbody id="sortable_categories">
+                            @forelse ($categories as $category )
                             <tr>
-                                <td>1</td>
-                                <td>P. Cat 1</td>
-                                <td>Any</td>
-                                <td>4</td>
+                                <td>{{ $category->id }}</td>
+                                <td>{{ $category->name }}</td>
+                                <td>{{ !is_null($category->parent_category) ? $category->parent_category->name : '-'}}</td>
+                                <td>-</td>
                                 <td>
                                     <div class="table-actions">
                                         <a href="" class="text-primary mx-2"><i class="dw dw-edit2"></i></a>
@@ -76,6 +77,13 @@
                                     </div>
                                 </td>
                             </tr>
+                            @empty
+                            <tr>
+                                <td colspan="4">
+                                    <span class="text-danger">No item found</span>
+                                </td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
