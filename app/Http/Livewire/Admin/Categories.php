@@ -16,6 +16,7 @@ class Categories extends Component
 
 
     protected $listeners = [
+        'updateParentCategoryOrdering',
         'updateCategoryOrdering',
         'deleteCategoryAction'
     ];
@@ -83,7 +84,7 @@ class Categories extends Component
         }
     }
 
-    public function updateCategoryOrdering($positions)
+    public function updateParentCategoryOrdering($positions)
     {
         foreach ($positions as $position) {
             $index = $position[0];
@@ -179,6 +180,18 @@ class Categories extends Component
             $this->dispatchBrowserEvent('showToastr', ['type' => 'success', 'message' => 'Category has been updated successfully.']);
         } else {
             $this->dispatchBrowserEvent('showToastr', ['type' => 'error', 'message' => 'Something went wrong.']);
+        }
+    }
+
+    public function updateCategoryOrdering($positions)
+    {
+        foreach ($positions as $position) {
+            $index = $position[0];
+            $new_position = $position[1];
+            Category::where('id', $index)->update([
+                'ordering' => $new_position
+            ]);
+            $this->dispatchBrowserEvent('showToastr', ['type' => 'success', 'message' => 'Categories ordering have been updated successfully.']);
         }
     }
 

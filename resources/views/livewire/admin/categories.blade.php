@@ -63,9 +63,9 @@
                             <th>N. of posts</th>
                             <th>Actions</th>
                         </thead>
-                        <tbody>
+                        <tbody id="sortable_categories">
                             @forelse ($categories as $category )
-                            <tr>
+                            <tr data-index="{{$category->id}}" data-ordering="{{$category->ordering}}">
                                 <td>{{ $category->id }}</td>
                                 <td>{{ $category->name }}</td>
                                 <td>{{ !is_null($category->parent_category) ? $category->parent_category->name : '-'}}</td>
