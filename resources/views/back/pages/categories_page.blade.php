@@ -85,9 +85,9 @@
         });
     });
 
-     //Delete Category
+    //Delete Category
 
-     window.addEventListener('deleteCategory', function(event) {
+    window.addEventListener('deleteCategory', function(event) {
         var id = event.detail.id; // Access the ID of the category to delete
 
         // Show SweetAlert2 confirmation dialog
