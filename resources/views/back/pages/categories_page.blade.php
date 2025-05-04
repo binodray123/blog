@@ -80,6 +80,29 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 // Emit the Livewire event to delete the category
+                Livewire.emit('deleteParentCategoryAction', id);
+            }
+        });
+    });
+
+     //Delete Category
+
+     window.addEventListener('deleteCategory', function(event) {
+        var id = event.detail.id; // Access the ID of the category to delete
+
+        // Show SweetAlert2 confirmation dialog
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You want to delete this category.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Delete',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Emit the Livewire event to delete the category
                 Livewire.emit('deleteCategoryAction', id);
             }
         });

@@ -18,6 +18,7 @@ class Categories extends Component
     protected $listeners = [
         'updateParentCategoryOrdering',
         'updateCategoryOrdering',
+        'deleteParentCategoryAction',
         'deleteCategoryAction'
     ];
 
@@ -101,7 +102,7 @@ class Categories extends Component
         $this->dispatchBrowserEvent('deleteParentCategory', ['id' => $id]);
     }
 
-    public function deleteCategoryAction($id)
+    public function deleteParentCategoryAction($id)
     {
         $pcategory = ParentCategory::findOrFail($id);
         //Check if this parent category as children
@@ -192,6 +193,26 @@ class Categories extends Component
                 'ordering' => $new_position
             ]);
             $this->dispatchBrowserEvent('showToastr', ['type' => 'success', 'message' => 'Categories ordering have been updated successfully.']);
+        }
+    }
+
+    public function deleteCategory($id)
+    {
+        $this->dispatchBrowserEvent('deleteCategory', ['id' => $id]);
+    }
+
+    public function deleteCategoryAction($id)
+    {
+        $category = Category::findOrFail($id);
+        //Check if this category as children
+
+        //Delete category
+        $delete = $category->delete();
+
+        if ($delete) {
+            $this->dispatchBrowserEvent('showToastr', ['type' => 'success', 'message' => 'Category has been deleted successfully.']);
+        } else {
+            $this->dispatchBrowserEvent('showToastr', ['type' => 'error', 'message' => 'Something went wrong!']);
         }
     }
 
