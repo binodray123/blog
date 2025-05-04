@@ -2,13 +2,17 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Models\Category;
 use App\Models\ParentCategory;
 use Livewire\Component;
 
 class Categories extends Component
 {
-    public $isUpdateCategoryMode = false;
+    public $isUpdateParentCategoryMode = false;
     public $pcategory_id, $pcategory_name;
+
+    public $isUpdateCategoryMode = false;
+    public $category_id, $parent = 0, $category_name;
 
 
     protected $listeners = [
@@ -21,7 +25,7 @@ class Categories extends Component
     {
         $this->pcategory_id = null;
         $this->pcategory_name = null;
-        $this->isUpdateCategoryMode = false;
+        $this->isUpdateParentCategoryMode = false;
         $this->showParentCategoryModalForm();
     }
 
@@ -51,7 +55,7 @@ class Categories extends Component
         $pcategory = ParentCategory::findOrFail($id);
         $this->pcategory_id = $pcategory->id;
         $this->pcategory_name = $pcategory->name;
-        $this->isUpdateCategoryMode = true;
+        $this->isUpdateParentCategoryMode = true;
         $this->showParentCategoryModalForm();
     }
 
@@ -110,7 +114,39 @@ class Categories extends Component
             $this->dispatchBrowserEvent('showToastr', ['type' => 'error', 'message' => 'Something went wrong!']);
         }
     }
+    //Add Category Method
+    public function addCategory()
+    {
+        //Show add category modal form...
+        $this->category_id = null;
+        $this->parent = 0;
+        $this->category_name = null;
+        $this->isUpdateCategoryMode = false;
+        $this->showCategoryModalForm();
+    }
 
+    public function createCategory()
+    {
+        $this->validate([
+            'category_name' => 'required|unique:categories,name'
+        ], [
+            'category_name.required' => 'Category field is required',
+            'category_name.unique' => 'Category name is already exists.'
+        ]);
+
+        // store new category
+        $category = new Category();
+        $category->parent = $this->parent;
+        $category->name = $this->category_name;
+        $saved = $category->save();
+
+        if ($saved) {
+            $this->hideCategoryModalForm();
+            $this->dispatchBrowserEvent('showToastr', ['type' => 'success', 'message' => 'New category has been created successfully.']);
+        } else {
+            $this->dispatchBrowserEvent('showToastr', ['type' => 'error', 'message' => 'Something went wrong.']);
+        }
+    }
 
     public function showParentCategoryModalForm()
     {
@@ -124,6 +160,21 @@ class Categories extends Component
         $this->isUpdateCategoryMode = false;
         $this->pcategory_id = $this->pcategory_name = null;
     }
+
+    public function showCategoryModalForm()
+    {
+        $this->resetErrorBag();
+        $this->dispatchBrowserEvent('showCategoryModalForm');
+    }
+
+    public function hideCategoryModalForm()
+    {
+        $this->dispatchBrowserEvent('hideCategoryModalForm');
+        $this->isUpdateCategoryMode = false;
+        $this->category_id = $this->category_name = null;
+        $this->parent = 0;
+    }
+
     public function render()
     {
         return view('livewire.admin.categories', [

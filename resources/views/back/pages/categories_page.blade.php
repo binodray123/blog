@@ -7,12 +7,22 @@
 <!-- Include SweetAlert2 library -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    //show modals for parent category
     window.addEventListener('showParentCategoryModalForm', function() {
         $('#pcategory_modal').modal('show');
     });
 
     window.addEventListener('hideParentCategoryModalForm', function() {
         $('#pcategory_modal').modal('hide');
+    });
+
+    //show modals for category
+    window.addEventListener('showCategoryModalForm', function() {
+        $('#category_modal').modal('show');
+    });
+
+    window.addEventListener('hideCategoryModalForm', function() {
+        $('#category_modal').modal('hide');
     });
 
     //parent category data sortable
