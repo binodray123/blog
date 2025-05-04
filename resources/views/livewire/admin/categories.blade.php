@@ -63,7 +63,7 @@
                             <th>N. of posts</th>
                             <th>Actions</th>
                         </thead>
-                        <tbody id="sortable_categories">
+                        <tbody>
                             @forelse ($categories as $category )
                             <tr>
                                 <td>{{ $category->id }}</td>
@@ -72,7 +72,7 @@
                                 <td>-</td>
                                 <td>
                                     <div class="table-actions">
-                                        <a href="" class="text-primary mx-2"><i class="dw dw-edit2"></i></a>
+                                        <a href="javascript:;" wire:click="editCategory ({{$category->id}})" class="text-primary mx-2"><i class="dw dw-edit2"></i></a>
                                         <a href="" class="text-danger mx-2"><i class="dw dw-delete-3"></i></a>
                                     </div>
                                 </td>

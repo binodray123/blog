@@ -148,6 +148,40 @@ class Categories extends Component
         }
     }
 
+    public function editCategory($id)
+    {
+        $category = Category::findOrFail($id);
+        $this->category_id = $category->id;
+        $this->parent = $category->parent;
+        $this->category_name = $category->name;
+        $this->isUpdateCategoryMode = true;
+        $this->showCategoryModalForm();
+    }
+
+    public function updateCategory()
+    {
+        $category = Category::findOrFail($this->category_id);
+        $this->validate([
+            'category_name' => 'required|unique:categories,name,' . $category->id
+        ], [
+            'category_name.required' => 'Category name field is required.',
+            'category_name.unique' => 'Category name is already exists.'
+        ]);
+
+        //Update category
+        $category->name = $this->category_name;
+        $category->parent = $this->parent;
+        $category->slug = null;
+        $updated = $category->save();
+
+        if ($updated) {
+            $this->hideCategoryModalForm();
+            $this->dispatchBrowserEvent('showToastr', ['type' => 'success', 'message' => 'Category has been updated successfully.']);
+        } else {
+            $this->dispatchBrowserEvent('showToastr', ['type' => 'error', 'message' => 'Something went wrong.']);
+        }
+    }
+
     public function showParentCategoryModalForm()
     {
         $this->resetErrorBag();
