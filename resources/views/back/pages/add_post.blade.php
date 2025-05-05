@@ -112,13 +112,14 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/back/src/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
-<script src="//cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
+<!-- <script src="//cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script> -->
+<script src="/ckeditor/ckeditor.js"></script>
 
 
 <script>
     //Initialize CKeditor
-    CKEDITOR.replace('content',{
-        versionCheck:false
+    CKEDITOR.replace('content', {
+        versionCheck: false
     });
     $(document).ready(function() {
 
