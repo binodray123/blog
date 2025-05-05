@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PostController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -46,12 +47,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/profile', 'profileView')->name('profile');
             Route::post('/update-profile-picture', 'updateProfilePicture')->name('update_profile_picture');
 
+            // Only Super Admin can visit to this page
             Route::middleware(['onlySuperAdmin'])->group(function () {
                 Route::get('/settings', 'generalSettings')->name('settings');
                 Route::post('/update-logo', 'updateLogo')->name('update_logo');
                 Route::post('/update-favicon', 'updateFavicon')->name('update_favicon');
                 Route::get('/categories', 'categoriesPage')->name('categories');
             });
+        });
+
+        Route::controller(PostController::class)->group(function () {
+            Route::get('/post/new', 'addPost')->name('add_post');
+            Route::post('/post/create', 'createPost')->name('create_post');
+            Route::get('/posts', 'allPosts')->name('posts');
         });
     });
 });

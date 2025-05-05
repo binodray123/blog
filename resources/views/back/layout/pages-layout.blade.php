@@ -360,8 +360,8 @@
                             <span class="micon fa fa-newspaper-o"></span><span class="mtext"> Posts </span>
                         </a>
                         <ul class="submenu">
-                            <li><a href="#">New</a></li>
-                            <li><a href="#">Posts</a></li>
+                            <li><a href="{{route('admin.add_post')}}" class="{{Route::is('admin.add_post') ? 'active' : ''}}">New</a></li>
+                            <li><a href="{{route('admin.posts')}}" class="{{Route::is('admin.posts') ? 'active' : ''}}">Posts</a></li>
                         </ul>
                     </li>
                     @if (auth()->user()->type == 'superAdmin')
@@ -429,7 +429,7 @@
     <script src="{{ asset('back/vendors/scripts/script.min.js')}}"></script>
     <script src="{{ asset('back/vendors/scripts/process.js')}}"></script>
     <script src="{{ asset('back/vendors/scripts/layout-settings.js')}}"></script>
-    <script src="/jquery-3.0.0.min.js"></script>
+    <!-- <script src="/jquery-3.0.0.min.js"></script> -->
     <!-- jQuery UI JS -->
     <script src="/extra-assets/jquery-ui-1.14.1/jquery-ui.min.js"></script>
     @kropifyScripts
