@@ -37,7 +37,7 @@
                     </div>
                     <div class="form-group">
                         <label for=""><b>Content</b>:</label>
-                        <textarea name="content" id="" cols="30" rows="10" class="form-control" placeholder="Enter post content here...."></textarea>
+                        <textarea name="content" id="content" cols="30" rows="10" class="form-control" placeholder="Enter post content here...."></textarea>
                         <span class="text-danger error-text content_error"></span>
                     </div>
                 </div>
@@ -112,8 +112,14 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/back/src/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+<script src="//cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
+
 
 <script>
+    //Initialize CKeditor
+    CKEDITOR.replace('content',{
+        versionCheck:false
+    });
     $(document).ready(function() {
 
         // Setup CSRF for all AJAX requests
@@ -137,6 +143,8 @@
 
             const form = this;
             const formData = new FormData(form);
+            //Update CKeditor content before submit
+            formData.set('content', CKEDITOR.instances.content.getData());
 
             $.ajax({
                 url: $(form).attr('action'),
@@ -151,10 +159,11 @@
                 },
 
                 success: function(response) {
-                    console.log(response);
+                    // console.log(response);
 
                     if (response.status === 1) {
                         $(form)[0].reset();
+                        CKEDITOR.instances.content.setData('');
                         $('#featured_image_preview').attr('src', '').hide();
                         $('input[name="tags"]').tagsinput('removeAll');
 
@@ -187,6 +196,7 @@
         });
     });
 </script>
+
 
 
 @endpush
