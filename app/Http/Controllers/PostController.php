@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\File;
 
 class PostController extends Controller
 {
@@ -44,46 +46,59 @@ class PostController extends Controller
 
     public function createPost(Request $request)
     {
-        if ($request->ajax()) {
-            $validator = Validator::make($request->all(), [
-                'title' => 'required|unique:posts,title',
-                'content' => 'required',
-                'category' => 'required|exists:categories,id',
-                'featured_image' => 'required|image|mimes:jpeg,png,jpg|max:1024',
-            ]);
+        //validate the form
+        $request->validate([
+            'title' => 'required|unique:posts,title',
+            'content' => 'required',
+            'category' => 'required|exists:categories,id',
+            'featured_image' => 'required|mimes:png,jpg,jpeg|max:1024'
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => 0,
-                    'errors' => $validator->errors()
-                ], 422);
-            }
+        ]);
+        //create post
+        if ($request->hasFile('featured_image')) {
+            $path = "images/posts/";
+            $file = $request->file('featured_image');
+            $filename = $file->getClientOriginalName();
+            $new_filename = time() . '-' . $filename;
 
-            if ($request->hasFile('featured_image')) {
-                $path = "images/posts/";
-                $file = $request->file('featured_image');
-                $filename = time() . '-' . $file->getClientOriginalName();
-                $file->move(public_path($path), $filename);
+            //Upload featured image
+            $upload = $file->move(public_path($path), $new_filename);
+
+            if ($upload) {
+                //Generate Resized Image and Thumbnail
+                $resized_path = $path . 'resized/';
+                if (!File::isDirectory($resized_path)) {
+                    File::makeDirectory($resized_path, 0777, true, true);
+                }
+                // Thumbnail (Aspect ratio:1)
+                Image::make($path . $new_filename)
+                    ->fit(250, 250)
+                    ->save($resized_path . 'thumb_' . $new_filename);
+                //Resized Image (Aspect ratio: 1.6)
+                Image::make($path . $new_filename)
+                    ->fit(512, 320)
+                    ->save($resized_path . 'resized_' . $new_filename);
+
+                $post = new Post();
+                $post->author_id = auth()->id();
+                $post->category = $request->category;
+                $post->title = $request->title;
+                $post->content = $request->content;
+                $post->featured_image = $new_filename;
+                $post->tags = $request->tags;
+                $post->meta_keywords = $request->meta_keywords;
+                $post->meta_description = $request->meta_description;
+                $post->visibility = $request->visibility;
+                $saved = $post->save();
+
+                if ($saved) {
+                    return response()->json(['status' => 1, 'message' => 'New post has been created successfully.']);
+                } else {
+                    return response()->json(['status' => 0, 'message' => 'Something went wrong.']);
+                }
             } else {
-                return response()->json(['status' => 0, 'message' => 'Image upload failed.']);
+                return response()->json(['status' => 0, 'message' => 'Something went wrong on uploading a featured image.']);
             }
-
-            $post = new Post();
-            $post->author_id = auth()->id();
-            $post->category = $request->category;
-            $post->title = $request->title;
-            $post->content = $request->content;
-            $post->featured_image = $filename;
-            $post->tags = $request->tags;
-            $post->meta_keywords = $request->meta_keywords;
-            $post->meta_description = $request->meta_description;
-            $post->visibility = $request->visibility ?? 1;
-
-            $post->save();
-
-            return response()->json(['status' => 1, 'message' => 'New post has been created successfully.']);
         }
-
-        return response()->json(['status' => 0, 'message' => 'Invalid request.']);
     }
 }
