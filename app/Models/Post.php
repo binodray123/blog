@@ -40,4 +40,12 @@ class Post extends Model
     {
         return $this->hasOne(Category::class, 'id', 'category');
     }
+
+    public function scopeSearch($query, $term)
+    {
+        $term = "%$term%";
+        $query->where(function($query) use ($term){
+            $query->where('title','like',$term);
+        });
+    }
 }
