@@ -72,7 +72,7 @@
                                 <td>{{ $category->id }}</td>
                                 <td>{{ $category->name }}</td>
                                 <td>{{ !is_null($category->parent_category) ? $category->parent_category->name : '-'}}</td>
-                                <td>-</td>
+                                <td>{{$category->posts->count()}}</td>
                                 <td>
                                     <div class="table-actions">
                                         <a href="javascript:;" wire:click="editCategory ({{$category->id}})" class="text-primary mx-2"><i class="dw dw-edit2"></i></a>

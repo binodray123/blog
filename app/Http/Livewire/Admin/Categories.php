@@ -216,13 +216,19 @@ class Categories extends Component
         $category = Category::findOrFail($id);
         //Check if this category as children
 
-        //Delete category
-        $delete = $category->delete();
-
-        if ($delete) {
-            $this->dispatchBrowserEvent('showToastr', ['type' => 'success', 'message' => 'Category has been deleted successfully.']);
+        // Check if this category has related post(s)
+        if ($category->posts->count() > 0) {
+            $count = $category->posts->count();
+            $this->dispatchBrowserEvent('showToastr', ['type' => 'error', 'message' => 'This category has (' . $count . ') related post(s). Can not be deleted.']);
         } else {
-            $this->dispatchBrowserEvent('showToastr', ['type' => 'error', 'message' => 'Something went wrong!']);
+            //Delete category
+            $delete = $category->delete();
+
+            if ($delete) {
+                $this->dispatchBrowserEvent('showToastr', ['type' => 'success', 'message' => 'Category has been deleted successfully.']);
+            } else {
+                $this->dispatchBrowserEvent('showToastr', ['type' => 'error', 'message' => 'Something went wrong!']);
+            }
         }
     }
 
