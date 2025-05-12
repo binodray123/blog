@@ -78,7 +78,7 @@
                                     <i class="icon-copy dw dw-edit2"></i>
                                 </a>
                             </div>
-                            <a href="" data-color="#e95959" style="color: rgb(233, 89, 89);">
+                            <a href="javascript:;" wire:click.prevent="deletePost({{ $post->id }})" data-color="#e95959" style="color: rgb(233, 89, 89);">
                                 <i class="icon-copy dw dw-delete-3"></i>
                             </a>
                         </td>

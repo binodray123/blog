@@ -7,6 +7,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\ParentCategory;
 use App\Models\Category;
+use Illuminate\Support\Facades\File;
 
 class Posts extends Component
 {
@@ -27,6 +28,10 @@ class Posts extends Component
         'category' => ['except' => ''],
         'visibility' => ['except' => ''],
         'sortBy' => ['except' => ''],
+    ];
+
+    protected $listeners = [
+        'deletePostAction'
     ];
 
     public function updatedSearch()
@@ -52,6 +57,8 @@ class Posts extends Component
 
     public function mount()
     {
+        //if the superAdmin is loggedIn than select the superAdmin
+        $this->author = auth()->user()->type == "superAdmin" ? auth()->user()->id : '';
         $this->post_visibility = $this->visibility == 'public' ? 1 : 0;
         //Prepare categories selection
         $categories_html = '';
@@ -80,6 +87,41 @@ class Posts extends Component
             }
         }
         $this->categories_html = $categories_html;
+    }
+
+    public function deletePost($id)
+    {
+        $this->dispatchBrowserEvent('deletePost', ['id' => $id]);
+    }
+
+    public function deletePostAction($id)
+    {
+        $post = Post::findOrFail($id);
+        $path = "images/posts/";
+        $resized_path = $path . 'resized/';
+        $old_featured_image = $post->featured_image;
+
+        // Delete featured image
+        if ($old_featured_image != "" && File::exists(public_path($path . $old_featured_image))) {
+            File::delete(public_path($path . $old_featured_image));
+
+            //Delete Resized Image
+            if (File::exists(public_path($resized_path . 'resized_' . $old_featured_image))) {
+                File::delete(public_path($resized_path . 'resized_' . $old_featured_image));
+            }
+
+            //Delete Thumbnail
+            if(File::exists(public_path($resized_path.'thumb_'.$old_featured_image))){
+                File::delete(public_path($resized_path.'thumb_'.$old_featured_image));
+            }
+        }
+        //Delete post from Database
+        $delete = $post->delete();
+        if ($delete) {
+            $this->dispatchBrowserEvent('showToastr', ['type' => 'success', 'message' => 'Post has been deleted successfully.']);
+        } else {
+            $this->dispatchBrowserEvent('showToastr', ['type' => 'error', 'message' => 'Something went wrong.']);
+        }
     }
 
 
